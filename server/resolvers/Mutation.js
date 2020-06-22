@@ -1,5 +1,4 @@
 require('dotenv').config()
-import uuidv4 from 'uuid/v4'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
