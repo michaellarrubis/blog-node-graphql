@@ -47,6 +47,7 @@ const typeDefs = gql `
 		title: String!
 		body: String!
 		published: Boolean!
+		imageUrl: String!
 		user: User!
 		comments: [Comment!]!
 	}
@@ -75,6 +76,7 @@ const typeDefs = gql `
 		title: String!
 		published: Boolean
 		body: String
+		imageUrl: String
 		userId: ID!
 	}
 
@@ -95,6 +97,7 @@ const typeDefs = gql `
 		title: String
 		published: Boolean
 		body: String
+		imageUrl: String
 		userId: ID
 	}
 

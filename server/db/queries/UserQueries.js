@@ -8,8 +8,8 @@ const getUser = async (filter) => {
 	return await db.user.findOne({ include: [db.post, db.comment], where: { ...filter } })
 }
 
-const registerUser = async (payload) => {
-	return await db.user.create({ ...payload })
+const registerUser = async (data) => {
+	return await db.user.create({ ...data })
 }
 
 const updateUser = async (data) => {

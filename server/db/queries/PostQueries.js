@@ -8,8 +8,8 @@ const getPost = async (filter) => {
 	return await db.post.findOne({ include: [{ model: db.user, required: true}, db.comment], where: { ...filter } })
 }
 
-const createPost = async (payload) => {
-	return await db.post.create({ ...payload })
+const createPost = async (data) => {
+	return await db.post.create({ ...data })
 }
 
 const updatePost = async (data) => {
