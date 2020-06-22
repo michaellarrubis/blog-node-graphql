@@ -37,6 +37,7 @@ const server = new ApolloServer({
 	    currentUser
 	  }
 	},
+	introspection: true,
 	playground: true
 })
 
