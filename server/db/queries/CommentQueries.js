@@ -1,0 +1,33 @@
+import db from '../models'
+
+const getComments = async () => {
+	return await db.comment.findAll()
+}
+
+const getComment = async (filter) => {
+	return await db.comment.findOne({ include: [{ model: db.user, required: true}, { model: db.post, required: true}], where: { ...filter } })
+}
+
+const createComment = async (payload) => {
+	return await db.comment.create({ ...payload })
+}
+
+const updateComment = async (data) => {
+	let comment = await db.comment.findByPk(data.id)
+	comment = data
+	return await comment.save()
+}
+
+const deleteComment = async (id) => {
+	return await db.comment.destroy({ where: { id }})
+}
+
+const CommentQueries = {
+	getComments,
+	getComment,
+	createComment,
+	updateComment,
+	deleteComment
+}
+
+export { CommentQueries as default }
