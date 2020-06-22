@@ -55,7 +55,11 @@ const Mutation = {
 			password: hashedPassword
 		})
 	},
-	async updateUser(parent, { id, data }, ctx, info) {
+	async updateUser(parent, { id, data }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		let user = await UserQueries.getUser({ id })
 
 		if (!user) {
@@ -78,7 +82,11 @@ const Mutation = {
 
 		return await UserQueries.updateUser(user)
 	},
-	async deleteUser(parent, { id }, ctx, info) {
+	async deleteUser(parent, { id }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		const removedUser = await UserQueries.getUser({ id })
 		const user = await UserQueries.deleteUser(id)
 
@@ -97,31 +105,33 @@ const Mutation = {
 			title: data.title,
 			body: data.body,
 			published: data.published,
+			imageUrl: data.imageUrl,
 			userId: data.userId
 		})
 	},
-	async updatePost(parent, { id, data }, ctx, info) {
+	async updatePost(parent, { id, data }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		let post = await PostQueries.getPost({ id })
 
 		if (!post) {
 			throw new Error('Post not found')
 		}
 
-		if (typeof data.title === 'string') {
-			post.title = data.title
-		}
-
-		if (typeof data.body === 'string') {
-			post.body = data.body
-		}
-
-		if (typeof data.published === 'boolean') {
-			post.published = data.published
-		}
+		post.title = data.title
+		post.body = data.body
+		post.published = data.published
+		post.imageUrl = data.imageUrl
 		
 		return await PostQueries.updatePost(post)
 	},
-	async deletePost(parent, { id }, ctx, info) {
+	async deletePost(parent, { id }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		const post = await PostQueries.getPost({ id })
 
 		if (!post) {
@@ -131,7 +141,11 @@ const Mutation = {
 		await PostQueries.deletePost(id)
 		return post
 	},
-	async createComment(parent, { data }, ctx, info) {
+	async createComment(parent, { data }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		const user = await UserQueries.getUser({id: data.userId})
 		const post = await PostQueries.getPost({id: data.postId})
 
@@ -145,7 +159,11 @@ const Mutation = {
 			postId: data.postId
 		})
 	},
-	async updateComment(parent, { id, data }, ctx, info) {
+	async updateComment(parent, { id, data }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		let comment = await CommentQueries.getComment({ id })
 
 		if (!comment) {
@@ -159,7 +177,11 @@ const Mutation = {
 		await CommentQueries.updateComment(comment)
 		return comment
 	},
-	async deleteComment(parent, { id }, ctx, info) {
+	async deleteComment(parent, { id }, { currentUser }, info) {
+		if (!currentUser) {
+			throw new Error('Not Logged In.')
+		}
+
 		const comment = await CommentQueries.getComment({ id })
 
 		if (!comment) {
