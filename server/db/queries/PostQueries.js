@@ -1,7 +1,12 @@
 import db from '../models'
 
-const getPosts = async ({ limit, offset }) => {
-	return await db.post.findAll({ limit: limit, offset: offset, include: [{ model: db.user, required: true }, db.comment] })
+const getPosts = async ({ limit, page }) => {
+	return await db.post.findAndCountAll({ 
+		limit, 
+		offset: (page - 1) * limit, 
+		include: [{ model: db.user, required: true }, db.comment], 
+		where: { published: true }
+	})
 }
 
 const getPost = async (filter) => {

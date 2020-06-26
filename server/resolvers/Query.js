@@ -15,8 +15,13 @@ const Query = {
 
 		return user
 	},
-	async posts(parent, { limit, offset }, ctx, info) {
-		return await PostQueries.getPosts({limit: parseInt(limit), offset: parseInt(offset)})
+	async posts(parent, { limit, page }, ctx, info) {
+		const postResults = await PostQueries.getPosts({limit: parseInt(limit), page: parseInt(page)})
+
+		return {
+			posts: postResults.rows,
+			count: postResults.count
+		}
 	},
 	async post(parent, { id }, ctx, info) {
 		const post = await PostQueries.getPost({ id })
