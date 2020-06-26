@@ -105,7 +105,7 @@ const Mutation = {
 			title: data.title,
 			body: data.body,
 			published: data.published,
-			imageUrl: data.imageUrl,
+			imageUrl: data.imageUrl || "",
 			userId: data.userId
 		})
 	},

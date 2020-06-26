@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express'
 const typeDefs = gql `
 	type Query {
 		users: [User!]!
-		posts: [Post!]!
+		posts(limit: ID!, offset: ID!): [Post!]!
 		comments: [Comment!]!
 		user(id: ID!): User!
 		post(id: ID!): Post!

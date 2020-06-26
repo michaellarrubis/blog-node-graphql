@@ -1,7 +1,7 @@
 import db from '../models'
 
-const getPosts = async () => {
-	return await db.post.findAll({ include: [{ model: db.user, required: true }, db.comment] })
+const getPosts = async ({ limit, offset }) => {
+	return await db.post.findAll({ limit: limit, offset: offset, include: [{ model: db.user, required: true }, db.comment] })
 }
 
 const getPost = async (filter) => {
