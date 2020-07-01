@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-express'
 
 const typeDefs = gql `
+	scalar Date
+
 	type Query {
 		users: [User!]!
 		posts(limit: ID!, page: ID!): PostsResponse!
@@ -21,7 +23,7 @@ const typeDefs = gql `
 		updateComment(id: ID!, data: UpdateCommentInput!): Comment!
 		deleteComment(id: ID!): Comment!
 
-		registerUser(data: RegisterInput!): User!
+		registerUser(data: RegisterInput!): LoginResponse!
 		loginUser(data: LoginInput!): LoginResponse!
 	}
 	
@@ -31,14 +33,14 @@ const typeDefs = gql `
 		name: String
 		email: String!
 		age: Int
-		createdAt: String
-		updatedAt: String
+		createdAt: Date
+		updatedAt: Date
 		posts: [Post!]!
 		comments: [Comment!]!
 	}
 
 	type LoginResponse {
-	  token: String
+	  access_token: String
 	  user: User
 	}
 
@@ -48,6 +50,8 @@ const typeDefs = gql `
 		body: String!
 		published: Boolean!
 		imageUrl: String!
+		createdAt: Date!
+		updatedAt: Date!
 		user: User!
 		comments: [Comment!]!
 	}

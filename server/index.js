@@ -4,6 +4,7 @@ import express from 'express'
 import { ApolloServer, gql } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
+import { GraphQLDateTime } from "graphql-iso-date";
 
 import typeDefs from './schema'
 import Query from './resolvers/Query'
@@ -15,27 +16,28 @@ app.use(morgan('dev'))
 
 
 const getUserToken = (token) => {
-  try {
-    return token ? jwt.verify(token, process.env.JWT_SECRET_KEY) : null
-  } catch (err) {
-    return null
-  }
+  	try {
+    	return token ? jwt.verify(token, process.env.JWT_SECRET_KEY) : null
+  	} catch (err) {
+    	return null
+  	}
 }
 
 const server = new ApolloServer({
 	typeDefs,
 	resolvers: {
 		Query,
-		Mutation
+		Mutation,
+		Date: GraphQLDateTime
 	},
 	context: ({ req }) => {
 		const tokenWithBearer = req.headers.authorization || ''
-	  const token = tokenWithBearer.split(' ')[1]
-	  const currentUser = getUserToken(token)
+	  	const token = tokenWithBearer.split(' ')[1]
+	  	const currentUser = getUserToken(token)
 
-	  return {
-	    currentUser
-	  }
+	  	return {
+	    	currentUser
+	  	}
 	},
 	introspection: true,
 	playground: true

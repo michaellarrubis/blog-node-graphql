@@ -6,21 +6,8 @@ import UserQueries from '../db/queries/UserQueries'
 import PostQueries from '../db/queries/PostQueries'
 import CommentQueries from '../db/queries/CommentQueries'
 
-const Mutation = {
-	async loginUser(parent, { data }, ctx, info) {
-		const user = await UserQueries.getUser({ email: data.email })
-
-		if (!user) {
-			throw new Error('Invalid Login.')
-		}
-
-		const passwordCheck = await bcrypt.compare(data.password, user.password)
-
-		if (!user) {
-			throw new Error('Invalid Login.')
-		}
-
-		const token = jwt.sign(
+const generateToken = (user) => {
+	const access_token = jwt.sign(
 	    {
 	      id: user.id,
 	      email: user.email,
@@ -30,17 +17,35 @@ const Mutation = {
 	    {
 	      expiresIn: process.env.JWT_EXPIRES_IN
 	    }
-	  )
-	  return {
-	    token,
+	)
+	
+	return {
+	    access_token,
 	    user
-	  }
+	}
+}
+
+const Mutation = {
+	async loginUser(parent, { data }, ctx, info) {
+		const user = await UserQueries.getUser({ email: data.email })
+
+		if (!user) {
+			throw new Error('Email or Password is Invalid.')
+		}
+
+		const passwordCheck = await bcrypt.compare(data.password, user.password)
+
+		if (!passwordCheck) {
+			throw new Error('Password is Invalid.')
+		}
+
+		return generateToken(user);
 	},
 	async registerUser(parent, { data }, ctx, info) {
 		const user = await UserQueries.getUser({ email: data.email })
 
 		if (user) {
-			throw new Error(`User with Email: ${data.email} is already taken.`)
+			throw new Error(`Email is already taken.`)
 		}
 
 		if (!data.name) {
@@ -49,11 +54,13 @@ const Mutation = {
 
 		const hashedPassword = await bcrypt.hash(data.password, 10)
 
-		return await UserQueries.registerUser({
+		const newUser = await UserQueries.registerUser({
 			name: data.name,
 			email: data.email,
 			password: hashedPassword
 		})
+
+		return generateToken(newUser.dataValues);
 	},
 	async updateUser(parent, { id, data }, { currentUser }, info) {
 		if (!currentUser) {
