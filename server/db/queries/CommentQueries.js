@@ -1,7 +1,11 @@
 import db from '../models'
 
 const getComments = async () => {
-	return await db.comment.findAll()
+	return await db.comment.findAll({
+		order: [
+			['id', 'DESC']
+		]
+	})
 }
 
 const getComment = async (filter) => {

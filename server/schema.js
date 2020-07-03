@@ -66,6 +66,8 @@ const typeDefs = gql `
 		text: String!
 		post: Post!
 		user: User!
+		createdAt: Date!
+		updatedAt: Date!
 	}
 
 	# Inputs

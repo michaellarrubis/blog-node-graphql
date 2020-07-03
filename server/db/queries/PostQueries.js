@@ -2,15 +2,27 @@ import db from '../models'
 
 const getPosts = async ({ limit, page }) => {
 	return await db.post.findAndCountAll({ 
-		limit, 
+		limit: limit, 
 		offset: (page - 1) * limit, 
 		include: [{ model: db.user, required: true }, db.comment], 
+		where: { published: true },
+		order: [
+			['id', 'ASC']
+		]
+	})
+}
+
+const getPostsCount = async () => {
+	return await db.post.findAll({ 
 		where: { published: true }
 	})
 }
 
 const getPost = async (filter) => {
-	return await db.post.findOne({ include: [{ model: db.user, required: true}, db.comment], where: { ...filter } })
+	return await db.post.findOne({ 
+		include: [{ model: db.user, required: true}, db.comment],
+		where: { ...filter } 
+	})
 }
 
 const createPost = async (data) => {
@@ -29,6 +41,7 @@ const deletePost = async (id) => {
 
 const PostQueries = {
 	getPosts,
+	getPostsCount,
 	getPost,
 	createPost,
 	updatePost,
