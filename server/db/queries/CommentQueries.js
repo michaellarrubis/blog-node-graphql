@@ -9,7 +9,14 @@ const getComments = async () => {
 }
 
 const getComment = async (filter) => {
-	return await db.comment.findOne({ include: [{ model: db.user, required: true}, { model: db.post, required: true}], where: { ...filter } })
+	return await db.comment.findOne({ 
+		include: [{ 
+			model: db.user, 
+			required: true }, { 
+			model: db.post, 
+			required: true
+		}], 
+		where: { ...filter } })
 }
 
 const createComment = async (data) => {

@@ -7,7 +7,7 @@ const getPosts = async ({ limit, page }) => {
 		include: [{ model: db.user, required: true }, db.comment], 
 		where: { published: true },
 		order: [
-			['id', 'ASC']
+			['id', 'DESC']
 		]
 	})
 }
