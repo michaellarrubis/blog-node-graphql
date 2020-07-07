@@ -1,14 +1,14 @@
 import db from '../models'
 
 const getPosts = async ({ limit, page }) => {
+	const order = limit > 3 ? [['id', 'DESC']] : [['id', 'ASC']]
+	
 	return await db.post.findAndCountAll({ 
 		limit: limit, 
 		offset: (page - 1) * limit, 
 		include: [{ model: db.user, required: true }, db.comment], 
 		where: { published: true },
-		order: [
-			['id', 'DESC']
-		]
+		order
 	})
 }
 
