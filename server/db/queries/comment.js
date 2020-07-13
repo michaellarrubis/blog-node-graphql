@@ -33,7 +33,7 @@ const deleteComment = async (id) => {
 	return await db.comment.destroy({ where: { id }})
 }
 
-const CommentQueries = {
+const queries = {
 	getComments,
 	getComment,
 	createComment,
@@ -41,4 +41,4 @@ const CommentQueries = {
 	deleteComment
 }
 
-export { CommentQueries as default }
+export { queries as default }

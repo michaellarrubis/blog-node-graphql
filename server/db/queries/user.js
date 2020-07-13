@@ -22,7 +22,7 @@ const deleteUser = async (id) => {
 	return await db.user.destroy({ where: { id }})
 }
 
-const UserQueries = {
+const queries = {
 	getUsers,
 	getUser,
 	registerUser,
@@ -30,4 +30,4 @@ const UserQueries = {
 	deleteUser
 }
 
-export { UserQueries as default }
+export { queries as default }

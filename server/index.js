@@ -8,7 +8,7 @@ import { GraphQLDateTime } from "graphql-iso-date";
 
 import typeDefs from './schema'
 import Query from './resolvers/Query'
-import Mutation from './resolvers/Mutation'
+import Mutation from './resolvers/mutations'
 
 const app = express()
 app.use(cors())

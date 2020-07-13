@@ -39,7 +39,7 @@ const deletePost = async (id) => {
 	return await db.post.destroy({ where: { id }})
 }
 
-const PostQueries = {
+const queries = {
 	getPosts,
 	getPostsCount,
 	getPost,
@@ -48,4 +48,4 @@ const PostQueries = {
 	deletePost
 }
 
-export { PostQueries as default }
+export { queries as default }

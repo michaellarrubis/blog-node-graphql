@@ -1,13 +1,13 @@
-import UserQueries from '../db/queries/UserQueries'
-import PostQueries from '../db/queries/PostQueries'
-import CommentQueries from '../db/queries/CommentQueries'
+import queryUser from '../db/queries/user'
+import queryPost from '../db/queries/post'
+import queryComment from '../db/queries/comment'
 
 const Query = {
 	async users(parent, args, ctx, info) {
-		return await UserQueries.getUsers()
+		return await queryUser.getUsers()
 	},
 	async user(parent, { id }, ctx, info) {
-		const user = await UserQueries.getUser({ id })
+		const user = await queryUser.getUser({ id })
 
 		if (!user) {
 			throw new Error(`User with ID: ${id} is not found.`)
@@ -16,8 +16,8 @@ const Query = {
 		return user
 	},
 	async posts(parent, { limit, page }, ctx, info) {
-		const postCounts = await PostQueries.getPostsCount()
-		const postResults = await PostQueries.getPosts({limit: parseInt(limit), page: parseInt(page)})
+		const postCounts = await queryPost.getPostsCount()
+		const postResults = await queryPost.getPosts({limit: parseInt(limit), page: parseInt(page)})
 
 		return {
 			posts: postResults.rows,
@@ -25,7 +25,7 @@ const Query = {
 		}
 	},
 	async post(parent, { id }, ctx, info) {
-		const post = await PostQueries.getPost({ id })
+		const post = await queryPost.getPost({ id })
 
 		if (!post) {
 			throw new Error(`Post with ID: ${id} is not found.`)
@@ -34,7 +34,7 @@ const Query = {
 		return post
 	},
 	async comments(parent, args, ctx, info) {
-		return await CommentQueries.getComments()
+		return await queryComment.getComments()
 	}
 }
 
