@@ -1,8 +1,8 @@
-import queryUser from '../db/queries/user'
-import queryPost from '../db/queries/post'
-import queryComment from '../db/queries/comment'
+import queryUser from '../../db/queries/user'
+import queryPost from '../../db/queries/post'
+import queryComment from '../../db/queries/comment'
 
-const Query = {
+export default {
 	async users(parent, args, ctx, info) {
 		return await queryUser.getUsers()
 	},
@@ -37,5 +37,3 @@ const Query = {
 		return await queryComment.getComments()
 	}
 }
-
-export { Query as default }
