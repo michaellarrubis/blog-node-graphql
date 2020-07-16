@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import { GraphQLDateTime } from "graphql-iso-date";
 
 import typeDefs from './schema'
-import Query from './resolvers/Query'
+import Query from './resolvers/query'
 import Mutation from './resolvers/mutations'
 
 const app = express()
