@@ -1,5 +1,5 @@
 import { loginUser, registerUser, updateUser, deleteUser } from './user';
-import { createPost, updatePost, deletePost } from './post';
+import { deletePost, upsertPost } from './post';
 import { createComment, updateComment, deleteComment } from './comment';
 
 export default {
@@ -8,9 +8,8 @@ export default {
 	updateUser,
 	deleteUser,
 
-	createPost,
-	updatePost,
 	deletePost,
+	upsertPost,
 
 	createComment,
 	updateComment,

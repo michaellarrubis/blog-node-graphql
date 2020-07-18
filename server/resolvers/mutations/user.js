@@ -3,18 +3,16 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import queryUser from '../../db/queries/user'
+import { checkCurrentUserIsAuthorized } from '../../utils/helper'
 
 const generateToken = (user) => {
 	const access_token = jwt.sign(
-	    {
-	      id: user.id,
-	      email: user.email,
-	      name: user.name
-	    },
-	    process.env.JWT_SECRET_KEY,
-	    {
-	      expiresIn: process.env.JWT_EXPIRES_IN
-	    }
+		{ 
+			email: user.email,
+			mame: user.name 
+		},
+		process.env.SECRET_KEY, 
+		{ expiresIn: process.env.JWT_EXPIRES_IN }
 	)
 	
 	return {
@@ -36,8 +34,8 @@ export const loginUser = async (parent, { data }, ctx, info) => {
 		throw new Error('Password is Invalid.')
 	}
 
-	return generateToken(user);
-};
+	return generateToken(user)
+}
 
 export const registerUser = async (parent, { data }, ctx, info) => {
 	const user = await queryUser.getUser({ email: data.email })
@@ -58,13 +56,11 @@ export const registerUser = async (parent, { data }, ctx, info) => {
 		password: hashedPassword
 	})
 
-	return generateToken(newUser.dataValues);
-};
+	return generateToken(newUser)
+}
 
 export const updateUser = async (parent, { id, data }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	let user = await queryUser.getUser({ id })
 
@@ -87,12 +83,10 @@ export const updateUser = async (parent, { id, data }, { currentUser }, info) =>
 	user.udpatedAt = Date.now()
 
 	return await queryUser.updateUser(user)
-};
+}
 
 export const deleteUser = async (parent, { id }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	const removedUser = await queryUser.getUser({ id })
 	const user = await queryUser.deleteUser(id)
@@ -102,4 +96,4 @@ export const deleteUser = async (parent, { id }, { currentUser }, info) => {
 	}
 
 	return removedUser
-};
+}

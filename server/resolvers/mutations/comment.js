@@ -2,10 +2,10 @@ import queryUser from '../../db/queries/user'
 import queryPost from '../../db/queries/post'
 import queryComment from '../../db/queries/comment'
 
+import { checkCurrentUserIsAuthorized } from '../../utils/helper'
+
 export const createComment = async (parent, { data }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	const user = await queryUser.getUser({id: data.userId})
 	const post = await queryPost.getPost({id: data.postId})
@@ -19,12 +19,10 @@ export const createComment = async (parent, { data }, { currentUser }, info) => 
 		userId: data.userId,
 		postId: data.postId
 	})
-};
+}
 
 export const updateComment = async (parent, { id, data }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	let comment = await queryComment.getComment({ id })
 
@@ -38,12 +36,10 @@ export const updateComment = async (parent, { id, data }, { currentUser }, info)
 
 	await queryComment.updateComment(comment)
 	return comment
-};
+}
 
 export const deleteComment = async (parent, { id }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	const comment = await queryComment.getComment({ id })
 
@@ -53,4 +49,4 @@ export const deleteComment = async (parent, { id }, { currentUser }, info) => {
 
 	await queryComment.deleteComment(id)
 	return comment
-};
+}

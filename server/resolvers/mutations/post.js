@@ -1,42 +1,39 @@
 import queryPost from '../../db/queries/post'
+import { checkCurrentUserIsAuthorized } from '../../utils/helper'
 
-export const createPost = async (parent, { data }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
+export const upsertPost = async (parent, { id, data }, { currentUser }, info) => {
+	checkCurrentUserIsAuthorized(currentUser)
+
+	if (!id) {
+		if (!data.title) {
+			throw new Error('Must provide a title.')
+		}
+
+		return await queryPost.createPost({
+			title: data.title,
+			body: data.body,
+			published: data.published,
+			imageUrl: data.imageUrl || "",
+			userId: data.userId
+		})
+	} else {
+		let post = await queryPost.getPost({ id })
+
+		if (!post) {
+			throw new Error('Post not found')
+		}
+
+		post.title = data.title
+		post.body = data.body
+		post.published = data.published
+		post.imageUrl = data.imageUrl
+		
+		return await queryPost.updatePost(post)
 	}
-	
-	return await queryPost.createPost({
-		title: data.title,
-		body: data.body,
-		published: data.published,
-		imageUrl: data.imageUrl || "",
-		userId: data.userId
-	})
-};
-
-export const updatePost = async (parent, { id, data }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
-
-	let post = await queryPost.getPost({ id })
-
-	if (!post) {
-		throw new Error('Post not found')
-	}
-
-	post.title = data.title
-	post.body = data.body
-	post.published = data.published
-	post.imageUrl = data.imageUrl
-	
-	return await queryPost.updatePost(post)
-};
+}
 
 export const deletePost = async (parent, { id }, { currentUser }, info) => {
-	if (!currentUser) {
-		throw new Error('Not Logged In.')
-	}
+	checkCurrentUserIsAuthorized(currentUser)
 
 	const post = await queryPost.getPost({ id })
 
@@ -46,4 +43,4 @@ export const deletePost = async (parent, { id }, { currentUser }, info) => {
 
 	await queryPost.deletePost(id)
 	return post
-};
+}

@@ -15,8 +15,7 @@ const typeDefs = gql `
 		updateUser(id: ID!, data: UpdateUserInput!): User!
 		deleteUser(id: ID!): User!
 
-		createPost(data: CreatePostInput!): Post!
-		updatePost(id: ID!, data: UpdatePostInput!): Post!
+		upsertPost(id: ID, data: postInput!): Post!
 		deletePost(id: ID!): Post!
 
 		createComment(data: CreateCommentInput!): Comment!
@@ -83,12 +82,12 @@ const typeDefs = gql `
 		password: String!
 	}
 
-	input CreatePostInput {
-		title: String!
+	input postInput {
+		title: String
 		published: Boolean
 		body: String
 		imageUrl: String
-		userId: ID!
+		userId: ID
 	}
 
 	input CreateCommentInput {
@@ -102,14 +101,6 @@ const typeDefs = gql `
 		name: String
 		email: String
 		age: Int
-	}
-
-	input UpdatePostInput {
-		title: String
-		published: Boolean
-		body: String
-		imageUrl: String
-		userId: ID
 	}
 
 	input UpdateCommentInput {
