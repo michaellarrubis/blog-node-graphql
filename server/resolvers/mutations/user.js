@@ -23,13 +23,11 @@ const generateToken = (user) => {
 
 export const loginUser = async (parent, { data }, ctx, info) => {
 	const user = await queryUser.getUser({ email: data.email })
-
 	if (!user) {
 		throw new Error('Email or Password is Invalid.')
 	}
 
 	const passwordCheck = await bcrypt.compare(data.password, user.password)
-
 	if (!passwordCheck) {
 		throw new Error('Password is Invalid.')
 	}

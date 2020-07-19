@@ -1,18 +1,15 @@
 import db from '../models'
 
 const getUsers = async () => {
-	const _users = await db.user.findAll({ include: [db.post, db.comment] })
-	return _users ? _users.dataValues : []
+	return await db.user.findAll({ include: [db.post, db.comment] })
 }
 
 const getUser = async (filter) => {
-	const _user = await db.user.findOne({ include: [db.post, db.comment], where: { ...filter } })
-	return _user ? _user.dataValues : {}
+	return await db.user.findOne({ include: [db.post, db.comment], where: { ...filter } })
 }
 
 const registerUser = async (data) => {
-	const _user = await db.user.create({ ...data })
-	return _user ? user.dataValues : {}
+	return await db.user.create({ ...data })
 }
 
 const updateUser = async (data) => {
