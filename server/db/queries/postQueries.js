@@ -1,36 +1,36 @@
-import { post, comment, user } from "../models";
+import db from "../models";
 
 const getPosts = async ({ limit, page }) => {
   const order = limit > 3 ? [["id", "DESC"]] : [["id", "ASC"]];
 
-  return await post.findAndCountAll({
+  return await db.post.findAndCountAll({
     limit: limit,
     offset: (page - 1) * limit,
-    include: [{ model: user, required: true }, comment],
+    include: [{ model: db.user, required: true }, db.comment],
     where: { published: true },
     order,
   });
 };
 
 const getPost = async (filter) => {
-  return await post.findOne({
-    include: [{ model: user, required: true }, comment],
+  return await db.post.findOne({
+    include: [{ model: db.user, required: true }, db.comment],
     where: { ...filter },
   });
 };
 
 const createPost = async (data) => {
-  return await post.create({ ...data });
+  return await db.post.create({ ...data });
 };
 
 const updatePost = async (data) => {
-  let post = await post.findByPk(data.id);
+  let post = await db.post.findByPk(data.id);
   post = data;
   return await post.save();
 };
 
 const deletePost = async (id) => {
-  return await post.destroy({ where: { id } });
+  return await db.post.destroy({ where: { id } });
 };
 
 const queries = {

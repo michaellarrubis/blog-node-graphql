@@ -1,20 +1,20 @@
-import { post, comment, user } from "../models";
+import db from "../models";
 
 const getComments = async () => {
-  return await comment.findAll({
+  return await db.comment.findAll({
     order: [["id", "DESC"]],
   });
 };
 
 const getComment = async (filter) => {
-  return await comment.findOne({
+  return await db.comment.findOne({
     include: [
       {
-        model: user,
+        model: db.user,
         required: true,
       },
       {
-        model: post,
+        model: db.post,
         required: true,
       },
     ],
@@ -23,17 +23,17 @@ const getComment = async (filter) => {
 };
 
 const createComment = async (data) => {
-  return await comment.create({ ...data });
+  return await db.comment.create({ ...data });
 };
 
 const updateComment = async (data) => {
-  let comment = await comment.findByPk(data.id);
+  let comment = await db.comment.findByPk(data.id);
   comment = data;
-  return await comment.save();
+  return await db.comment.save();
 };
 
 const deleteComment = async (id) => {
-  return await comment.destroy({ where: { id } });
+  return await db.comment.destroy({ where: { id } });
 };
 
 const queries = {

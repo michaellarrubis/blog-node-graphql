@@ -1,28 +1,28 @@
-import { post, comment, user } from "../models";
+import db from "../models";
 
 const getUsers = async () => {
-  return await user.findAll({ include: [post, comment] });
+  return await db.user.findAll({ include: [post, comment] });
 };
 
 const getUser = async (filter) => {
-  return await user.findOne({
-    include: [post, comment],
+  return await db.user.findOne({
+    include: [db.post, db.comment],
     where: { ...filter },
   });
 };
 
 const registerUser = async (data) => {
-  return await user.create({ ...data });
+  return await db.user.create({ ...data });
 };
 
 const updateUser = async (data) => {
-  let _user = await user.findByPk(data.id);
+  let _user = await db.user.findByPk(data.id);
   _user = data;
   return await _user.save();
 };
 
 const deleteUser = async (id) => {
-  return await user.destroy({ where: { id } });
+  return await db.user.destroy({ where: { id } });
 };
 
 const queries = {
