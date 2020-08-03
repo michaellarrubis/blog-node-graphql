@@ -1,11 +1,11 @@
-import queryUser from "../../db/queries/userQueries";
+import userQuery from "../../db/queries/userQueries";
 
 export const users = async (parent, args, ctx, info) => {
-  return await queryUser.getUsers();
+  return await userQuery.getUsers();
 };
 
 export const user = async (parent, { id }, ctx, info) => {
-  const user = await queryUser.getUser({ id });
+  const user = await userQuery.getUser({ id });
 
   if (!user) {
     throw new Error(`User with ID: ${id} is not found.`);

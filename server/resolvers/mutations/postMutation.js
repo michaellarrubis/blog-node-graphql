@@ -1,4 +1,4 @@
-import queryPost from "../../db/queries/postQueries";
+import postQuery from "../../db/queries/postQueries";
 import { checkCurrentUserIsAuthorized } from "../../utils/helper";
 
 export const upsertPost = async (
@@ -14,7 +14,7 @@ export const upsertPost = async (
       throw new Error("Must provide a title.");
     }
 
-    return await queryPost.createPost({
+    return await postQuery.createPost({
       title: data.title,
       body: data.body,
       published: data.published,
@@ -22,7 +22,7 @@ export const upsertPost = async (
       userId: data.userId,
     });
   } else {
-    let post = await queryPost.getPost({ id });
+    let post = await postQuery.getPost({ id });
 
     if (!post) {
       throw new Error("Post not found");
@@ -33,19 +33,19 @@ export const upsertPost = async (
     post.published = data.published;
     post.imageUrl = data.imageUrl;
 
-    return await queryPost.updatePost(post);
+    return await postQuery.updatePost(post);
   }
 };
 
 export const deletePost = async (parent, { id }, { currentUser }, info) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  const post = await queryPost.getPost({ id });
+  const post = await postQuery.getPost({ id });
 
   if (!post) {
     throw new Error("Post not Found");
   }
 
-  await queryPost.deletePost(id);
+  await postQuery.deletePost(id);
   return post;
 };

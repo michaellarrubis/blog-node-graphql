@@ -2,7 +2,7 @@ require("dotenv").config();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import queryUser from "../../db/queries/userQueries";
+import userQuery from "../../db/queries/userQueries";
 import { checkCurrentUserIsAuthorized } from "../../utils/helper";
 
 const generateToken = (user) => {
@@ -22,7 +22,7 @@ const generateToken = (user) => {
 };
 
 export const loginUser = async (parent, { data }, ctx, info) => {
-  const user = await queryUser.getUser({ email: data.email });
+  const user = await userQuery.getUser({ email: data.email });
   if (!user) {
     throw new Error("Email or Password is Invalid.");
   }
@@ -36,7 +36,7 @@ export const loginUser = async (parent, { data }, ctx, info) => {
 };
 
 export const registerUser = async (parent, { data }, ctx, info) => {
-  const user = await queryUser.getUser({ email: data.email });
+  const user = await userQuery.getUser({ email: data.email });
 
   if (user) {
     throw new Error(`Email is already taken.`);
@@ -48,7 +48,7 @@ export const registerUser = async (parent, { data }, ctx, info) => {
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  const newUser = await queryUser.registerUser({
+  const newUser = await userQuery.registerUser({
     name: data.name,
     email: data.email,
     password: hashedPassword,
@@ -65,14 +65,14 @@ export const updateUser = async (
 ) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  let user = await queryUser.getUser({ id });
+  let user = await userQuery.getUser({ id });
 
   if (!user) {
     throw new Error(`User with ID: ${id} is not found.`);
   }
 
   if (typeof data.email === "string") {
-    const userExist = await queryUser.getUser({ email: data.email });
+    const userExist = await userQuery.getUser({ email: data.email });
 
     if (userExist) {
       throw new Error(`User with Email: ${data.email} is already taken.`);
@@ -85,14 +85,14 @@ export const updateUser = async (
   user.age = data.age;
   user.udpatedAt = Date.now();
 
-  return await queryUser.updateUser(user);
+  return await userQuery.updateUser(user);
 };
 
 export const deleteUser = async (parent, { id }, { currentUser }, info) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  const removedUser = await queryUser.getUser({ id });
-  const user = await queryUser.deleteUser(id);
+  const removedUser = await userQuery.getUser({ id });
+  const user = await userQuery.deleteUser(id);
 
   if (user == 0) {
     throw new Error(
