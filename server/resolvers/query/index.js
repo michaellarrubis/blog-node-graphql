@@ -1,5 +1,5 @@
 import { users, user } from "./userQuery";
-import { posts, post } from "./postQuery";
+import { posts, post, postBySlug } from "./postQuery";
 import { comments } from "./commentQuery";
 
 export default {
@@ -7,5 +7,6 @@ export default {
   user,
   posts,
   post,
+  postBySlug,
   comments,
 };

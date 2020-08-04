@@ -9,7 +9,7 @@ import morgan from "morgan";
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 
-import userQuery from "./db/queries/userQueries";
+import dbUserQuery from "./db/queries/userQueries";
 
 const corsOptions = {
   origin: process.env.ALLOWED_ORIGIN,
@@ -23,7 +23,7 @@ const params = {
 };
 
 const strategy = new Strategy(params, async (payload, done) => {
-  const user = await userQuery.getUser({ email: payload.email });
+  const user = await dbUserQuery.getUser({ email: payload.email });
 
   return done(null, user);
 });

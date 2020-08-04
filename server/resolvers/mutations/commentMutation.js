@@ -1,6 +1,6 @@
-import userQuery from "../../db/queries/userQueries";
-import postQuery from "../../db/queries/postQueries";
-import commentQuery from "../../db/queries/commentQueries";
+import dbUserQuery from "../../db/queries/userQueries";
+import dbPostQuery from "../../db/queries/postQueries";
+import dbCommentQuery from "../../db/queries/commentQueries";
 
 import { checkCurrentUserIsAuthorized } from "../../utils/helper";
 
@@ -12,14 +12,14 @@ export const createComment = async (
 ) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  const user = await userQuery.getUser({ id: data.userId });
-  const post = await postQuery.getPost({ id: data.postId });
+  const user = await dbUserQuery.getUser({ id: data.userId });
+  const post = await dbPostQuery.getPost({ id: data.postId });
 
   if (!user || !post || !post.published) {
     throw new Error("Unable to comment");
   }
 
-  return await commentQuery.createComment({
+  return await dbCommentQuery.createComment({
     text: data.text,
     userId: data.userId,
     postId: data.postId,
@@ -34,7 +34,7 @@ export const updateComment = async (
 ) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  let comment = await commentQuery.getComment({ id });
+  let comment = await dbCommentQuery.getComment({ id });
 
   if (!comment) {
     throw new Error("Comment Not Found");
@@ -44,19 +44,19 @@ export const updateComment = async (
     comment.text = data.text;
   }
 
-  await commentQuery.updateComment(comment);
+  await dbCommentQuery.updateComment(comment);
   return comment;
 };
 
 export const deleteComment = async (parent, { id }, { currentUser }, info) => {
   checkCurrentUserIsAuthorized(currentUser);
 
-  const comment = await commentQuery.getComment({ id });
+  const comment = await dbCommentQuery.getComment({ id });
 
   if (!comment) {
     throw new Error("Comment not Found");
   }
 
-  await commentQuery.deleteComment(id);
+  await dbCommentQuery.deleteComment(id);
   return comment;
 };

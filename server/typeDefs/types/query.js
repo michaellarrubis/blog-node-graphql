@@ -7,6 +7,7 @@ const query = gql`
     comments: [Comment!]!
     user(id: ID!): User!
     post(id: ID!): Post!
+    postBySlug(slug: String!): Post!
   }
 `;
 

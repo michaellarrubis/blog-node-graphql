@@ -34,6 +34,13 @@ const getPost = async (filter) => {
   });
 };
 
+const getPostBySlug = async (filter) => {
+  return await db.post.findOne({
+    include: [{ model: db.user, required: true }, db.comment],
+    where: { ...filter },
+  });
+};
+
 const createPost = async (data) => {
   return await db.post.create({ ...data });
 };
@@ -51,6 +58,7 @@ const deletePost = async (id) => {
 const queries = {
   getPosts,
   getPost,
+  getPostBySlug,
   countPublishedPosts,
   createPost,
   updatePost,
