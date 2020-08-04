@@ -16,6 +16,7 @@ export const upsertPost = async (
 
     return await postQuery.createPost({
       title: data.title,
+      slug: data.title.replace(/\W+/g, "-").replace(/\-$/, "").toLowerCase(),
       body: data.body,
       published: data.published,
       imageUrl: data.imageUrl || "",
@@ -30,6 +31,10 @@ export const upsertPost = async (
 
     post.title = data.title;
     post.body = data.body;
+    post.slug = data.title
+      .replace(/\W+/g, "-")
+      .replace(/\-$/, "")
+      .toLowerCase();
     post.published = data.published;
     post.imageUrl = data.imageUrl;
 

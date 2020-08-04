@@ -5,6 +5,7 @@ const postType = gql`
     id: ID!
     title: String!
     body: String!
+    slug: String
     published: Boolean!
     imageUrl: String!
     createdAt: Date!
@@ -16,6 +17,7 @@ const postType = gql`
   input postInput {
     title: String
     published: Boolean
+    slug: String
     body: String
     imageUrl: String
     userId: ID
