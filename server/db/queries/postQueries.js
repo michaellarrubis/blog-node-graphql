@@ -1,4 +1,6 @@
 import db from "../models";
+import Sequelize from "sequelize";
+const Op = Sequelize.Op;
 
 const getPosts = async ({ limit, page }) => {
   const order = limit > 3 ? [["id", "DESC"]] : [["id", "ASC"]];
@@ -41,6 +43,13 @@ const getPostBySlug = async (filter) => {
   });
 };
 
+const getPostsBySlug = async (filter) => {
+  return await db.post.findAll({
+    include: [{ model: db.user, required: true }, db.comment],
+    where: { slug: { [Op.like]: "%" + filter.slug + "%" } },
+  });
+};
+
 const createPost = async (data) => {
   return await db.post.create({ ...data });
 };
@@ -59,6 +68,7 @@ const queries = {
   getPosts,
   getPost,
   getPostBySlug,
+  getPostsBySlug,
   countPublishedPosts,
   createPost,
   updatePost,

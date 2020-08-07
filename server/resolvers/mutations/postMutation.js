@@ -14,9 +14,19 @@ export const upsertPost = async (
       throw new Error("Must provide a title.");
     }
 
+    let slugTitle = data.title
+      .replace(/\W+/g, "-")
+      .replace(/\-$/, "")
+      .toLowerCase();
+
+    const postBySlug = await dbPostQuery.getPostsBySlug({ slug: slugTitle });
+    if (postBySlug && postBySlug.length > 0) {
+      slugTitle = `${slugTitle}-${postBySlug.length + 1}`;
+    }
+
     return await dbPostQuery.createPost({
       title: data.title,
-      slug: data.title.replace(/\W+/g, "-").replace(/\-$/, "").toLowerCase(),
+      slug: slugTitle,
       body: data.body,
       published: data.published,
       imageUrl: data.imageUrl || "",
